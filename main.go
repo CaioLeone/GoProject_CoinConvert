@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	var valor_em_brl float32
+	var valor_em_brl float64
 	//var moeda_destino string
 
 	fmt.Println("Bem Vindo, Aventureiro! Vamos converter suas moedas!")
