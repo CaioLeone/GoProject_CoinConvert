@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-	//var valor_em_brl float64
-
+	var valor_em_brl float64
+	var moeda_destino string
 	rates := map[string]float64{
 		"USD": 0.151,
 		"EUR": 0.137,
@@ -41,17 +41,16 @@ func main() {
 
 	fmt.Println("Bem Vindo, Aventureiro! Vamos converter suas moedas!")
 
-	/*
-		scanner := bufio.NewScanner(os.Stdin)
-		fmt.Print("./convert [valor_em_brl] [moeda_destino]\n")
-		scanner.Scan()
-		fmt.Sscanf(scanner.Text(), "%f", &valor_em_brl)
-	*/
-	for rName, rValue := range rates {
-		fmt.Printf("%v : %v\n", rName, rValue)
+	value, ok := rates[moeda_destino]
+	if ok {
+		fmt.Println("existe essa moeda: ", value)
+
+		ConvertMoney(valor_em_brl, value)
+	} else {
+		fmt.Println("Moeda nao existe")
 	}
 }
 
-func ConvertMoney(real int, exchange float64) float64 {
-	return float64(real) * exchange
+func ConvertMoney(real float64, exchange float64) float64 {
+	return real * exchange
 }
