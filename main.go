@@ -41,32 +41,44 @@ func main() {
 	}
 
 	if len(os.Args) != 3 {
-		fmt.Print("./Convert [valor_em_brl] [moeda_destino]: ")
+		fmt.Println("./Convert [valor_em_brl] [moeda_destino]: ")
 		return
 	}
 	//CAPTURA STRING
-	valor_em_string := os.Args[1]
-	moeda_destino := os.Args[2]
+	valorString := os.Args[1]
+	moedaDestino := os.Args[2]
 
 	//CONVERTER STRING FLOAT
-	valor_em_brl, err := strconv.ParseFloat(valor_em_string, 64)
+	valorBrl, err := strconv.ParseFloat(valorString, 64)
 	if err != nil {
 		fmt.Println("Valor em BRL deve ser um numero valido")
 		return
 	}
 
 	//TRATAMENTO MOEDA. TUDO EM MAIUSCULO
-	moeda_destino = strings.ToUpper(moeda_destino)
+	moedaDestino = strings.ToUpper(moedaDestino)
 
 	//VERIFICACAO DA MOEDA
-	rate, exists := rates[moeda_destino]
-	if !exists {
-		fmt.Println("Moeda nao existe")
+	rate, err := GetRate(moedaDestino, rates)
+	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
-	resultado := ConvertMoney(valor_em_brl, rate)
-	fmt.Printf("%.2f \n", resultado)
+	//RESULTADO
+	resultado := ConvertMoney(valorBrl, rate)
+	fmt.Printf("%.2f\n", resultado)
+}
+
+func GetRate(moeda string, rates map[string]float64) (float64, error) {
+
+	rate, exists := rates[moeda]
+
+	if !exists {
+		return 0, fmt.Errorf("Moeda %s nao encontrada", moeda)
+	}
+
+	return rate, nil
 }
 
 func ConvertMoney(real float64, exchange float64) float64 {
