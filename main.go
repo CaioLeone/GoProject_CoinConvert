@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
-	var valor_em_brl float64
-	var moeda_destino string
 	rates := map[string]float64{
 		"USD": 0.151,
 		"EUR": 0.137,
@@ -39,16 +40,33 @@ func main() {
 		"RON": 0.746,
 	}
 
-	fmt.Println("Bem Vindo, Aventureiro! Vamos converter suas moedas!")
-
-	value, ok := rates[moeda_destino]
-	if ok {
-		fmt.Println("existe essa moeda: ", value)
-
-		ConvertMoney(valor_em_brl, value)
-	} else {
-		fmt.Println("Moeda nao existe")
+	if len(os.Args) != 3 {
+		fmt.Print("./Convert [valor_em_brl] [moeda_destino]: ")
+		return
 	}
+	//CAPTURA STRING
+	valor_em_string := os.Args[1]
+	moeda_destino := os.Args[2]
+
+	//CONVERTER STRING FLOAT
+	valor_em_brl, err := strconv.ParseFloat(valor_em_string, 64)
+	if err != nil {
+		fmt.Println("Valor em BRL deve ser um numero valido")
+		return
+	}
+
+	//TRATAMENTO MOEDA. TUDO EM MAIUSCULO
+	moeda_destino = strings.ToUpper(moeda_destino)
+
+	//VERIFICACAO DA MOEDA
+	rate, exists := rates[moeda_destino]
+	if !exists {
+		fmt.Println("Moeda nao existe")
+		return
+	}
+
+	resultado := ConvertMoney(valor_em_brl, rate)
+	fmt.Printf("%.2f \n", resultado)
 }
 
 func ConvertMoney(real float64, exchange float64) float64 {
