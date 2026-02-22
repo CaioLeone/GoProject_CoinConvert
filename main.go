@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -8,36 +9,43 @@ import (
 )
 
 func main() {
-	rates := map[string]float64{
-		"USD": 0.151,
-		"EUR": 0.137,
-		"JPY": 16.29,
-		"GBP": 0.13,
-		"CHF": 0.1402,
-		"AUD": 0.2712,
-		"CAD": 0.2374,
-		"CNY": 1.251,
-		"HKD": 1.326,
-		"NZD": 0.2922,
-		"SEK": 1.655,
-		"NOK": 1.806,
-		"DKK": 1.122,
-		"SGD": 0.2249,
-		"KRW": 242.97,
-		"ZAR": 3.239,
-		"MXN": 3.454,
-		"INR": 14.71,
-		"ILS": 0.63,
-		"THB": 5.74,
-		"IDR": 2875.0,
-		"MYR": 0.754,
-		"PHP": 9.74,
-		"PLN": 0.644,
-		"CZK": 3.77,
-		"HUF": 61.59,
-		"TRY": 6.49,
-		"BGN": 0.293,
-		"RON": 0.746,
+	// rates := map[string]float64{
+	// 	"USD": 0.151,
+	// 	"EUR": 0.137,
+	// 	"JPY": 16.29,
+	// 	"GBP": 0.13,
+	// 	"CHF": 0.1402,
+	// 	"AUD": 0.2712,
+	// 	"CAD": 0.2374,
+	// 	"CNY": 1.251,
+	// 	"HKD": 1.326,
+	// 	"NZD": 0.2922,
+	// 	"SEK": 1.655,
+	// 	"NOK": 1.806,
+	// 	"DKK": 1.122,
+	// 	"SGD": 0.2249,
+	// 	"KRW": 242.97,
+	// 	"ZAR": 3.239,
+	// 	"MXN": 3.454,
+	// 	"INR": 14.71,
+	// 	"ILS": 0.63,
+	// 	"THB": 5.74,
+	// 	"IDR": 2875.0,
+	// 	"MYR": 0.754,
+	// 	"PHP": 9.74,
+	// 	"PLN": 0.644,
+	// 	"CZK": 3.77,
+	// 	"HUF": 61.59,
+	// 	"TRY": 6.49,
+	// 	"BGN": 0.293,
+	// 	"RON": 0.746,
+	// }
+
+	//LER JSON e PREENCHER MAP COM TAXAS
+	rates, err := LoadRates("rates.json")
+	if err != nil {
+		fmt.Println("Erro ao carregar taxas: ", err)
+		return
 	}
 
 	if len(os.Args) != 3 {
@@ -68,6 +76,24 @@ func main() {
 	//RESULTADO
 	resultado := ConvertMoney(valorBrl, rate)
 	fmt.Printf("%.2f\n", resultado)
+}
+
+func LoadRates(filename string) (map[string]float64, error) {
+	data, err := os.ReadFile(filename)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var rates map[string]float64
+
+	err = json.Unmarshal(data, &rates)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return rates, nil
 }
 
 func GetRate(moeda string, rates map[string]float64) (float64, error) {
