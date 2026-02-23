@@ -50,3 +50,6 @@ Ao desenvolver este projeto, você praticará os seguintes conceitos de programa
    * Código de moeda que não existe nas taxas (ex: ./convert 10 XYZ).
 2. Formatação de Saída: Garanta que a saída numérica respeite a formatação local para decimais (vírgula em vez de ponto), se aplicável. (Nota: O exemplo 195,48 sugere isso, mas o exemplo 1.50 sugere o contrário. O ideal é padronizar - para CLI, o ponto . é mais comum e fácil de usar em scripts).
 3. Sensibilidade a Maiúsculas/Minúsculas: Faça o programa funcionar independentemente se o usuário digitar usd ou USD.
+
+## Status
+1. Desafio Concluido
